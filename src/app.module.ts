@@ -12,6 +12,7 @@ import { ConfigModule } from '@nestjs/config';
       type: 'postgres',
       url: process.env.DATABASE_URL,
       autoLoadEntities: true,
+      synchronize: true,
     }),
     UserModule],
   controllers: [AppController],
