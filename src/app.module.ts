@@ -4,7 +4,9 @@ import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [UserModule],
+  imports: [
+    ConfigureModule.forRoot({
+    UserModule],
   controllers: [AppController],
   providers: [AppService],
 })
