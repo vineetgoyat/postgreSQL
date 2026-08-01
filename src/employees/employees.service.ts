@@ -11,6 +11,8 @@ export class EmployeesService {
     ) {}
 
     async create(employeeData: Partial<Employee>): Promise<Employee> {
-        
+        const employee= this.employeeRepository.create(employeeData);
+        return this.employeeRepository.save(employee);
+
     }
 }
