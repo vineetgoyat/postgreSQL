@@ -9,4 +9,8 @@ export class EmployeesService {
         @InjectRepository(Employee)
         private employeeRepository : Repository<Employee>
     ) {}
+
+    async create(employeeData: Partial<Employee>): Promise<Employee> {
+        
+    }
 }
