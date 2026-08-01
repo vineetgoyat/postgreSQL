@@ -7,4 +7,10 @@ export class Employee {
 
     @Column()
     'name': string;
+
+    @Column()
+    'position': string;
+
+    @Column()
+    'department': string;
 }
