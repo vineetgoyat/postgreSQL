@@ -35,4 +35,14 @@ export class EmployeesService {
         const updatedEmployee = Object.assign(employee, updatedData);
         return this.employeeRepository.save(updatedEmployee);
     }
+
+    async delete(id: number): Promise<{ message: string}> {
+        const result = await this.employeeRepository.delete(id);
+        if (result.affected === 0) {
+            throw new NotFoundException(`Employee with id ${id} not found`);
+        }
+
+        return {message: `Employee with id ${id} has been deleted`};
+
+    }
 }
