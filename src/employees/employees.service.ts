@@ -19,4 +19,7 @@ export class EmployeesService {
     async findAll(): Promise<Employee[]> {
         return this.employeeRepository.find();
     }
+    async findOne(id: number): Promise<Employee> {
+        return this.employeeRepository.findOneBy({id});
+    }
 }
