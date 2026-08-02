@@ -30,6 +30,8 @@ export class EmployeesController {
     }
 
     @Delete(':id')
-    async delete
+    async deleteEmployee(@Param('id') id: number): Promise<{message: string}> {
+        return this.employeesService.delete(id);
+    }
 
 }
