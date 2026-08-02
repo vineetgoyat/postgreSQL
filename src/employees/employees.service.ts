@@ -20,6 +20,10 @@ export class EmployeesService {
         return this.employeeRepository.find();
     }
     async findOne(id: number): Promise<Employee> {
-        return this.employeeRepository.findOneBy({id});
+        const employee = await this.employeeRepository.findOneBy({id});
+        if (!employee) {
+            throw new Error(`Employee with id ${id} not found`);
+        }
+        return employee;
     }
 }
