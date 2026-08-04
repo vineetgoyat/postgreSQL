@@ -29,7 +29,7 @@ export class EmployeesController {
         return this.employeesService.update(id, body);
     }
 
-    @Delete(':id')pajama
+    @Delete(':id')
     async deleteEmployee(@Param('id') id: number): Promise<{message: string}> {
         return this.employeesService.delete(id);
     }
