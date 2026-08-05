@@ -1,38 +1,31 @@
-import {
-  CanActivate,
-  ExecutionContext,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
-// @ts-ignore: supabase client types may not be installed in this environment
-import { createClient } from '@supabase/supabase-js';
+import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
+import { Observable } from 'rxjs';
+import * as jwt from 'jsonwebtoken';
+import { Request } from 'express';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class SupabaseAuthGuard implements CanActivate {
-  private supabase = createClient(
-    process.env.SUPABASE_URL!,
-    process.env.SUPABASE_ANON_KEY!,
-  );
-
-  async canActivate(context: ExecutionContext): Promise<boolean> {
-    const request = context.switchToHttp().getRequest();
-
-    const auth = request.headers.authorization;
-
-    if (!auth?.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Missing token');
+  constructor(private configService: ConfigService) {}
+  canActivate(
+    context: ExecutionContext,
+  ): boolean | Promise<boolean> | Observable<boolean> {
+    const request = context.switchToHttp().getRequest<Request>();
+    const authHeader = request.headers['authorization'];
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      throw new UnauthorizedException('Missing or invalid Authorization header');
     }
-
-    const token = auth.split(' ')[1];
-
-    const { data, error } = await this.supabase.auth.getUser(token);
-
-    if (error) {
-      throw new UnauthorizedException(error.message);
+    const token = authHeader.split(' ')[1];
+    const jwtSecret = this.configService.get<string>('SUPABASE_JWT_SECRET');
+    if(!jwtSecret) {
+      throw new UnauthorizedException('Missing JWT secret in configuration');
     }
-
-    request.user = data.user;
-
-    return true;
+    try{
+      const decode = jwt.verify(token, jwtSecret);
+      request['user']= decode;
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired token');
+    }
   }
 }
