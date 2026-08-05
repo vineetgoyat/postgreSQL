@@ -25,7 +25,8 @@ export class SupabaseAuthGuard implements CanActivate {
       request['user']= decode;
       return true;
     } catch (error) {
-      throw new UnauthorizedException('Invalid or expired token');
+    console.error('JWT Error:', error);
+      throw error;
     }
   }
 }
