@@ -1,32 +1,38 @@
-import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import * as jwt from 'jsonwebtoken';
-import { Request } from 'express';
-import { ConfigService } from '@nestjs/config';
+import {
+  CanActivate,
+  ExecutionContext,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
+// @ts-ignore: supabase client types may not be installed in this environment
+import { createClient } from '@supabase/supabase-js';
 
 @Injectable()
 export class SupabaseAuthGuard implements CanActivate {
-  constructor(private configService: ConfigService) {}
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
-    const request = context.switchToHttp().getRequest<Request>();
-    const authHeader = request.headers['authorization'];
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-      throw new UnauthorizedException('Missing or invalid Authorization header');
+  private supabase = createClient(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_ANON_KEY!,
+  );
+
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    const request = context.switchToHttp().getRequest();
+
+    const auth = request.headers.authorization;
+
+    if (!auth?.startsWith('Bearer ')) {
+      throw new UnauthorizedException('Missing token');
     }
-    const token = authHeader.split(' ')[1];
-    const jwtSecret = this.configService.get<string>('SUPABASE_JWT_SECRET');
-    if(!jwtSecret) {
-      throw new UnauthorizedException('Missing JWT secret in configuration');
+
+    const token = auth.split(' ')[1];
+
+    const { data, error } = await this.supabase.auth.getUser(token);
+
+    if (error) {
+      throw new UnauthorizedException(error.message);
     }
-    try{
-      const decode = jwt.verify(token, jwtSecret);
-      request['user']= decode;
-      return true;
-    } catch (error) {
-    console.error('JWT Error:', error);
-      throw error;
-    }
+
+    request.user = data.user;
+
+    return true;
   }
 }
