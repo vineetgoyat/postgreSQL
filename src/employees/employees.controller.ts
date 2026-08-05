@@ -17,8 +17,8 @@ export class EmployeesController {
     }
 
     @Get('search')
-    async searchemployees(@Query('name') name?: string, @Query('department') department?: string): Promise<Employee[]>{
-        return this.employeesService.search({name, })
+    async searchEmployees(@Query('name') name?: string, @Query('department') department?: string): Promise<Employee[]>{
+        return this.employeesService.search({ name, department });
     }
 
     @Get(':id')
