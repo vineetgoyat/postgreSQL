@@ -48,5 +48,11 @@ export class EmployeesService {
 
     async search (filter: {name?: string, department?: string}): Promise<Employee[]> {
         const query = this.employeeRepository.createQueryBuilder('employee');
+
+        if(filter.name) {
+            query.andWhere('employee.name ILIKE :name', { name: `%{filters.name}%`})
+        }
+
+        if(filter)
     }
 }
