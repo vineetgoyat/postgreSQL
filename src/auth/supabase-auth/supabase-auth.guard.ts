@@ -22,7 +22,10 @@ export class SupabaseAuthGuard implements CanActivate {
     }
     try{
       const decode = jwt.verify(token, jwtSecret);
+      request['user']= decode;
+      return true;
+    } catch (error) {
+      throw new UnauthorizedException('Invalid or expired token');
     }
-    return true;
   }
 }
