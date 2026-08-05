@@ -54,7 +54,7 @@ export class EmployeesService {
         }
 
         if(filter.department) {
-            query.andWhere('employee.department :department', { department: filters.department})
+            query.andWhere('employee.department :dept', { dept: `{filters.department}`})
         }
     }
 }
