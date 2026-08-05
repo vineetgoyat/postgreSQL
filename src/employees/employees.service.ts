@@ -46,17 +46,18 @@ export class EmployeesService {
 
     }
 
-    async search (filter: {name?: string, department?: string}): Promise<Employee[]> {
+    async search (filters: {name?: string, department?: string}): Promise<Employee[]> {
         const query = this.employeeRepository.createQueryBuilder('employee');
 
-        if(filter.name) {
-            query.andWhere('employee.name ILIKE :name', { name: `%{filters.name}%`})
+        if(filters.name) {
+            query.andWhere('employee.name ILIKE :name', { name: `%${filters.name}%` });
         }
 
-        if(filter.department) {
-            query.andWhere('employee.department :dept', { dept: `{filters.department}`})
+        if(filters.department) {
+            query.andWhere('employee.department =:dept', { dept: filters.department });
         }
 
         return query.getMany();
     }
 }
+
