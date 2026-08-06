@@ -7,6 +7,7 @@ import { ConfigModule } from '@nestjs/config';
 import { EmployeesModule } from './employees/employees.module';
 import { Mongoose } from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -21,7 +22,8 @@ import { MongooseModule } from '@nestjs/mongoose';
       synchronize: true,
     }),
     UserModule,
-    EmployeesModule],
+    EmployeesModule,
+    AuthModule],
   controllers: [AppController],
   providers: [AppService],
 })
