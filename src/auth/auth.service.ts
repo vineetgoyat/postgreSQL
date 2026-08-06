@@ -20,11 +20,20 @@ export class AuthService {
 
   async login(email: string, password: string) {
     const user = await this.userModel.findOne({ email });
+
+    // TEMP DEBUG — remove once fixed
+    console.log('Login attempt for email:', email);
+    console.log('User found in DB:', user ? user.email : 'NO USER FOUND');
+
     if (!user) {
       throw new UnauthorizedException('Invalid email or password');
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
+
+    // TEMP DEBUG — remove once fixed
+    console.log('Password match result:', isMatch);
+
     if (!isMatch) {
       throw new UnauthorizedException('Invalid email or password');
     }
