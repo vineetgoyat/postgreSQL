@@ -16,5 +16,9 @@ export class AuthService {
         const user = new this.userModel({ email, password: hash });
         return user.save();
     }
+
+    async login (email: string, password: string) {
+        
+    }
    
 }
