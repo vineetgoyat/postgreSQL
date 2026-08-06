@@ -1,1 +1,1 @@
-export class UserSchema {}
+export class User {}
