@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserDocument } from './user.schema';
 import { Model } from 'mongoose';
@@ -7,40 +7,25 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
-  constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-    private jwtService: JwtService,
-  ) {}
+    constructor(
+         @InjectModel(User.name) private userModel: Model <UserDocument>, private jwtService: JwtService,
+    ){}
 
-  async signUp(email: string, password: string) {
-    const hash = await bcrypt.hash(password, 10);
-    const user = new this.userModel({ email, password: hash });
-    return user.save();
-  }
-
-  async login(email: string, password: string) {
-    const user = await this.userModel.findOne({ email });
-
-    // TEMP DEBUG — remove once fixed
-    console.log('Login attempt for email:', email);
-    console.log('User found in DB:', user ? user.email : 'NO USER FOUND');
-
-    if (!user) {
-      throw new UnauthorizedException('Invalid email or password');
+    async signUp( email : string, password : string ) {
+        const hash = await bcrypt.hash(password, 10);
+        const user = new this.userModel({ email, password: hash });
+        return user.save();
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    // TEMP DEBUG — remove once fixed
-    console.log('Password match result:', isMatch);
-
-    if (!isMatch) {
-      throw new UnauthorizedException('Invalid email or password');
+    async login (email: string, password: string) {
+        const user = await this.userModel.findOne({ email});
+        if(!user) return null;
+        const isMatch = await bcrypt.compare(password, user.password);
+        if(!isMatch) return null;
+        const payload = { email: user.email, sub : user._id };
+        return {
+            access_token: this.jwtService.sign(payload),
+        }
     }
-
-    const payload = { email: user.email, sub: user._id };
-    return {
-      access_token: this.jwtService.sign(payload),
-    };
-  }
+   
 }
