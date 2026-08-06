@@ -12,6 +12,8 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
+            useFactory: async(config: ConfigService) => ({
+            })
 
         })
     ],
