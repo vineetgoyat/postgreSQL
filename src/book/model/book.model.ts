@@ -1,0 +1,1 @@
+import { Schema, SchemaFactory, Prop } from '@nestjs/mongoose';
