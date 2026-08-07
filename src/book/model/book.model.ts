@@ -5,5 +5,6 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 @Schema()
 @ObjectType()
 export class Book extends Document {
-    
+    @Field(() => ID)
+    declare readonly _id: string;
 }
