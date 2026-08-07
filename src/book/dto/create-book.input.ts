@@ -12,5 +12,10 @@ export class CreateBookInput {
     @IsString()
     'description'?: string;
 
+    @Field()
+    @IsNotEmpty()
+    @IsString()
+    'author': string;
+
 
 }
