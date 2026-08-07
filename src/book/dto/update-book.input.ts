@@ -1,3 +1,11 @@
 import { CreateBookInput } from './create-book.input';
 import { InputType, Field, PartialType, ID } from '@nestjs/graphql';
-import { IsNotEmpty, IsString, IsOptional } from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
+
+@InputType()
+export class UpdateBookInput extends PartialType(CreateBookInput) {
+    @Field( () => ID)
+    @IsNotEmpty()
+    'id': string;
+    
+}
