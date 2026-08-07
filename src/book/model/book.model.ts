@@ -7,4 +7,12 @@ import { ObjectType, Field, ID } from '@nestjs/graphql';
 export class Book extends Document {
     @Field(() => ID)
     declare readonly _id: string;
+
+    @Prop({ required: true})
+    @Field()
+    title: string;
+
+    @Prop()
+    @Field( { nullable: true })
+    description?: string;
 }
