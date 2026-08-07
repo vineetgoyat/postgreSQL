@@ -9,11 +9,17 @@ import { Mongoose } from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { BookModule } from './book/book.module';
+import { ApolloDriverConfig } from 'node_modules/@nestjs/apollo/dist/interfaces/apollo-driver-config.interface';
+import { GraphQLModule } from '@nestjs/graphql';
 
 @Module({
   imports: [
+
     ConfigModule.forRoot({
       isGlobal: true,
+    }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+
     }),
     MongooseModule.forRoot(process.env.MONGO_URI!),
     TypeOrmModule.forRoot({
