@@ -23,6 +23,8 @@ import { join } from 'path/win32';
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver, 
       autoSchemaFile: join( process.cwd(), 'src/schema.gql'),
+      sortSchema: true,
+      Playground: true,
     }),
     MongooseModule.forRoot(process.env.MONGO_URI!),
     TypeOrmModule.forRoot({
