@@ -24,7 +24,7 @@ import { join } from 'path/win32';
       driver: ApolloDriver, 
       autoSchemaFile: join( process.cwd(), 'src/schema.gql'),
       sortSchema: true,
-      Playground: true,
+      playground: true,
     }),
     MongooseModule.forRoot(process.env.MONGO_URI!),
     TypeOrmModule.forRoot({
