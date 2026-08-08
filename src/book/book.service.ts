@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Book } from './model/book.model';
 import { CreateBookInput } from './dto/create-book.input';
@@ -19,5 +19,7 @@ export class BookService {
 
     async findOne( id: string ): Promise<Book> {
         const book = await this.bookModel.findById(id).exec();
+        if (!book) throw new NotFoundException(`Book with id ${id} not found`);
+        return book;
     }
 }
