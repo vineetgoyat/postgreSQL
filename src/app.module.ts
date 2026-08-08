@@ -9,10 +9,9 @@ import { Mongoose } from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
 import { AuthModule } from './auth/auth.module';
 import { BookModule } from './book/book.module';
-import { ApolloDriverConfig } from 'node_modules/@nestjs/apollo/dist/interfaces/apollo-driver-config.interface';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ApolloDriver } from 'node_modules/@nestjs/apollo/dist/drivers/apollo.driver';
-import { join } from 'path/win32';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
 
 @Module({
   imports: [
