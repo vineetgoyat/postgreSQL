@@ -30,4 +30,9 @@ export class BookResolver {
         return this.bookService.update(input);
     }
 
+    @Mutation( () => Book )
+    async deleteBook(@Args('id', { type: () => String }) id: string) {
+        return this.bookService.remove(id);
+    }
+
 }
