@@ -29,4 +29,10 @@ export class BookService {
         Object.assign(existingBook, input);
         return existingBook.save();
     }
+
+    async remove(id:string): Promise<boolean> {
+        const result = await this.bookModel.findByIdAndDelete(id);
+        if(!result) throw new NotFoundException('Book not found');
+        return true;
+    }
 }
